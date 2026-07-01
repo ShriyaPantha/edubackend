@@ -1,16 +1,20 @@
-const SibApiV3Sdk = require("sib-api-v3-sdk");
+// utils/sendOTP.js
+const nodemailer = require("nodemailer");
 
-const defaultClient = SibApiV3Sdk.ApiClient.instance;
-defaultClient.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
-
-const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 const sendOTP = async (email, otp) => {
-  await apiInstance.sendTransacEmail({
-    sender: { email: process.env.EMAIL_USER, name: "School System" },
-    to: [{ email }],
+  await transporter.sendMail({
+    from: `"School System" <${process.env.EMAIL_USER}>`,
+    to: email,
     subject: "OTP Verification",
-    textContent: `Your OTP is ${otp}`,
+    text: `Your OTP is ${otp}`,
   });
 };
 
