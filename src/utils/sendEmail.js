@@ -6,6 +6,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS, // Gmail app password
   },
+  family: 4, // forces IPv4 — fixes ENETUNREACH on Render
 });
 
 // =========================
